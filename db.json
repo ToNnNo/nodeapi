@@ -1,0 +1,30 @@
+{
+  "product": [
+    {
+      "id": 1,
+      "name": "Pomme",
+      "price": 12.99
+    },
+    {
+      "id": 2,
+      "name": "Poire",
+      "price": 2.99
+    },
+    {
+      "id": 3,
+      "name": "Cerise",
+      "price": 0.99
+    },
+    {
+      "name": "Kaki",
+      "price": 1.23,
+      "id": 6
+    },
+    {
+      "name": "Banane",
+      "price": 1.05,
+      "id": 7
+    }
+  ],
+  "count": 12
+}
