@@ -1,6 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const helmet = require('helmet');
+const jwt = require('jsonwebtoken');
+const isAuthorized = require('./middleware/isAuthorized');
 
 const low = require('lowdb');
 const FileSync = require('lowdb/adapters/FileSync');
@@ -9,9 +11,9 @@ const adapter = new FileSync('db.json');
 const db = low(adapter);
 
 db.defaults({ product: [
-    { id: 1, name: 'Pomme', price: 12.99 },
-    { id: 2, name: 'Poire', price: 2.99 },
-    { id: 3, name: 'Cerise', price: 0.99 },], count: 4 })
+        { id: 1, name: 'Pomme', price: 12.99 },
+        { id: 2, name: 'Poire', price: 2.99 },
+        { id: 3, name: 'Cerise', price: 0.99 },], count: 4 })
     .write();
 
 const app = express();
@@ -46,6 +48,32 @@ app.get('/', (request, response) => {
 
     response.setHeader('Content-Type', 'text/html');
     response.send(html);
+});
+
+app.get('/login', (request, response) => {
+
+    const user = {
+        firstname: "John",
+        lastname: "Doe",
+        role: "user"
+    };
+
+    const token = jwt.sign(user, "commentestvotreblanquette", {
+        algorithm: 'HS256',
+        expiresIn: 60
+    });
+
+    response.send({"token": token});
+});
+
+app.get('/check', isAuthorized, (request, response) => {
+    response.send({"message": "Youpi"});
+});
+
+app.get('/me', isAuthorized, (request, response) => {
+
+    response.send( response.locals.user );
+
 });
 
 app.get('/product', (request, response) => {
